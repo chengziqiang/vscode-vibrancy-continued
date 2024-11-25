@@ -3,6 +3,7 @@ var fs = require('mz/fs');
 var fsExtra = require('fs-extra');
 var path = require('path');
 var { pathToFileURL } = require('url')
+const shell = require('node-powershell');
 
 /**
  * @type {(info: string) => string}
@@ -240,7 +241,32 @@ function checkRuntimeUpdate(current, last) {
 }
 
 function activate(context) {
-  console.log('vscode-vibrancy is active!');
+  vscode.window.showInformationMessage("asdfasdfdfdfojsdf");
+  try {
+    const shell = require('node-powershell');
+
+  }
+  catch (error) {
+    vscode.window.showInformationMessage(error);
+    vscode.window.showInformationMessage(typeof shell);
+  }
+  // const path = context.asAbsolutePath('./SetTransparency.cs');
+  // const ps = new shell({
+  //     executionPolicy: 'RemoteSigned',
+  //     noProfile: true,
+  // });
+  // context.subscriptions.push(ps);
+  // ps.addCommand('[Console]::OutputEncoding = [Text.Encoding]::UTF8');
+  // ps.addCommand(`Add-Type -Path '${path}'`);
+  // ps.addCommand(`[GlassIt.SetTransParency]::SetTransParency(${process.pid}, ${alpha})`);
+  // ps.invoke().then(res => {
+  //     console.log(res);
+  //     console.log(`GlassIt: set alpha ${alpha}`);
+  //     config().update('alpha', alpha, true);
+  // }).catch(err => {
+  //     console.error(err);
+  //     window.showErrorMessage(`GlassIt Error: ${err}`);
+  // });
 
   var appDir;
   try {
@@ -615,6 +641,7 @@ function activate(context) {
   vscode.window.onDidChangeActiveColorTheme((theme) => {
     checkDarkLightMode(theme)
   });
+
 }
 exports.activate = activate;
 

@@ -85,18 +85,20 @@ electron.app.on('browser-window-created', (_, window) => {
     opacity = app.theme.opacity[app.os];
   }
 
-  const backgroundRGB = hexToRgb(app.theme.background) || { r: 0, g: 0, b: 0 };
-
+  // modify start
+  const color = app.config.color
   if (app.os === 'win10') {
     const bindings = require('./vibrancy.cjs');
     bindings.setVibrancy(
       window.getNativeWindowHandle().readInt32LE(0),
       1,
-      backgroundRGB.r,
-      backgroundRGB.g,
-      backgroundRGB.b,
-      0
+      color.r,
+      color.g,
+      color.b,
+      color.a
     );
+    
+    // modify end
     const win10refresh = require('./win10refresh.cjs');
     win10refresh(window, 60);
 
@@ -197,13 +199,12 @@ function styleHTML() {
     opacity = app.theme.opacity[app.os];
   }
 
-  const backgroundRGB = hexToRgb(app.theme.background) || { r: 0, g: 0, b: 0 };
-
+  const color = app.config.color;
   const HTML = [
     `
     <style>
       html {
-        background: rgba(${backgroundRGB.r},${backgroundRGB.g},${backgroundRGB.b},${opacity}) !important;
+        background: rgba(${color.r},${color.g},${color.b},${opacity}) !important;
       }
       ${app.themeCSS}
     </style>

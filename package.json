@@ -111,6 +111,49 @@
           "minimum": "-1",
           "maximum": "1"
         },
+        "vscode_vibrancy.alpha": {
+          "description": "configuration.alpha.description",
+          "type": "number",
+          "default": "-1",
+          "minimum": "-1",
+          "maximum": "1"
+        },
+        "vscode_vibrancy.color": {
+          "type": "object",
+          "description": "The RGBA color configuration for vibrancy.",
+          "properties": {
+            "r": {
+              "type": "number",
+              "description": "Red component (0-255).",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "g": {
+              "type": "number",
+              "description": "Green component (0-255).",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "b": {
+              "type": "number",
+              "description": "Blue component (0-255).",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "a": {
+              "type": "number",
+              "description": "Alpha component (0-1).",
+              "minimum": 0,
+              "maximum": 255
+            }
+          },
+          "default": {
+            "r": 44,
+            "g": 44,
+            "b": 60,
+            "a": 100
+          }
+        },
         "vscode_vibrancy.theme": {
           "description": "%configuration.theme.description%",
           "type": "string",
