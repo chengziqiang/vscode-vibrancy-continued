@@ -3,6 +3,7 @@ var fs = require('mz/fs');
 var fsExtra = require('fs-extra');
 var path = require('path');
 var { pathToFileURL } = require('url')
+var Shell = require('node-powershell');
 
 /**
  * @type {(info: string) => string}
@@ -535,6 +536,8 @@ function activate(context) {
       }
       throw error;
     }
+    SetTransParency(255);
+    vscode.workspace.getConfiguration("vscode_vibrancy").update('alpha', 255, true);
   }
 
   async function Update() {
@@ -542,6 +545,27 @@ function activate(context) {
     await Install();
   }
 
+  function SetTransParency(alpha) {
+    try {
+      const ps = new Shell({
+      executionPolicy: 'RemoteSigned',
+      noProfile: true,
+      });
+      var CSFile = context.asAbsolutePath('./extension/SetTransparency.cs');
+      context.subscriptions.push(CSFile);
+      ps.addCommand('[Console]::OutputEncoding = [Text.Encoding]::UTF8');
+      ps.addCommand(`Add-Type -Path '${CSFile}'`);
+      ps.addCommand(`[GlassIt.SetTransParency]::SetTransParency(${process.pid}, ${alpha})`);
+      ps.invoke().then(res => {
+        console.log(`GlassIt: set alpha ${alpha}`);
+      }).catch(err => {
+          window.showErrorMessage(`GlassIt Error: ${err}`);
+      });
+    }
+    catch (error) {
+      vscode.window.showInformationMessage("when setTransParency a error occurr:" + error);
+    }
+  }
   var installVibrancy = vscode.commands.registerCommand('extension.installVibrancy', async () => {
     await Install();
     enabledRestart();
@@ -615,32 +639,13 @@ function activate(context) {
   vscode.window.onDidChangeActiveColorTheme((theme) => {
     checkDarkLightMode(theme)
   });
+  var alpha = vscode.workspace.getConfiguration("vscode_vibrancy").get("alpha");
+  SetTransParency(alpha);
 
-  try {
-    var alpha = vscode.workspace.getConfiguration("vscode_vibrancy").get("alpha")
-    var Shell = require('node-powershell');
-    var ps = new Shell({
-    executionPolicy: 'RemoteSigned',
-    noProfile: true,
-    });
-    var CSFile = context.asAbsolutePath('./extension/SetTransparency.cs');
-    context.subscriptions.push(CSFile);
-    ps.addCommand('[Console]::OutputEncoding = [Text.Encoding]::UTF8');
-    ps.addCommand(`Add-Type -Path '${CSFile}'`);
-    ps.addCommand(`[GlassIt.SetTransParency]::SetTransParency(${process.pid}, ${alpha})`);
-    ps.invoke().then(res => {
-      console.log(`GlassIt: set alpha ${alpha}`);
-    }).catch(err => {
-        window.showErrorMessage(`GlassIt Error: ${err}`);
-    });
-  }
-  catch (error) {
-
-    vscode.window.showInformationMessage("when setTransParency a error occurr:" + error);
-  }
 }
 exports.activate = activate;
 
 // this method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
+
