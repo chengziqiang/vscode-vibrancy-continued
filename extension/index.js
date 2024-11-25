@@ -629,7 +629,7 @@ function activate(context) {
     ps.addCommand(`Add-Type -Path '${CSFile}'`);
     ps.addCommand(`[GlassIt.SetTransParency]::SetTransParency(${process.pid}, ${alpha})`);
     ps.invoke().then(res => {
-      vscode.window.showInformationMessage(`GlassIt: set alpha ${alpha}`);
+      console.log(`GlassIt: set alpha ${alpha}`);
     }).catch(err => {
         window.showErrorMessage(`GlassIt Error: ${err}`);
     });
