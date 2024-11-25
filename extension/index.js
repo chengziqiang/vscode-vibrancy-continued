@@ -3,7 +3,6 @@ var fs = require('mz/fs');
 var fsExtra = require('fs-extra');
 var path = require('path');
 var { pathToFileURL } = require('url')
-const shell = require('node-powershell');
 
 /**
  * @type {(info: string) => string}
@@ -241,32 +240,7 @@ function checkRuntimeUpdate(current, last) {
 }
 
 function activate(context) {
-  vscode.window.showInformationMessage("asdfasdfdfdfojsdf");
-  try {
-    const shell = require('node-powershell');
-
-  }
-  catch (error) {
-    vscode.window.showInformationMessage(error);
-    vscode.window.showInformationMessage(typeof shell);
-  }
-  // const path = context.asAbsolutePath('./SetTransparency.cs');
-  // const ps = new shell({
-  //     executionPolicy: 'RemoteSigned',
-  //     noProfile: true,
-  // });
-  // context.subscriptions.push(ps);
-  // ps.addCommand('[Console]::OutputEncoding = [Text.Encoding]::UTF8');
-  // ps.addCommand(`Add-Type -Path '${path}'`);
-  // ps.addCommand(`[GlassIt.SetTransParency]::SetTransParency(${process.pid}, ${alpha})`);
-  // ps.invoke().then(res => {
-  //     console.log(res);
-  //     console.log(`GlassIt: set alpha ${alpha}`);
-  //     config().update('alpha', alpha, true);
-  // }).catch(err => {
-  //     console.error(err);
-  //     window.showErrorMessage(`GlassIt Error: ${err}`);
-  // });
+  console.log('vscode-vibrancy is active!');
 
   var appDir;
   try {
@@ -642,6 +616,28 @@ function activate(context) {
     checkDarkLightMode(theme)
   });
 
+  try {
+    var alpha = vscode.workspace.getConfiguration("vscode_vibrancy").get("alpha")
+    var Shell = require('node-powershell');
+    var ps = new Shell({
+    executionPolicy: 'RemoteSigned',
+    noProfile: true,
+    });
+    var CSFile = context.asAbsolutePath('./extension/SetTransparency.cs');
+    context.subscriptions.push(CSFile);
+    ps.addCommand('[Console]::OutputEncoding = [Text.Encoding]::UTF8');
+    ps.addCommand(`Add-Type -Path '${CSFile}'`);
+    ps.addCommand(`[GlassIt.SetTransParency]::SetTransParency(${process.pid}, ${alpha})`);
+    ps.invoke().then(res => {
+      vscode.window.showInformationMessage(`GlassIt: set alpha ${alpha}`);
+    }).catch(err => {
+        window.showErrorMessage(`GlassIt Error: ${err}`);
+    });
+  }
+  catch (error) {
+
+    vscode.window.showInformationMessage("when setTransParency a error occurr:" + error);
+  }
 }
 exports.activate = activate;
 

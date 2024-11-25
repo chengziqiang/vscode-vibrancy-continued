@@ -113,10 +113,10 @@
         },
         "vscode_vibrancy.alpha": {
           "description": "configuration.alpha.description",
-          "type": "number",
-          "default": "-1",
-          "minimum": "-1",
-          "maximum": "1"
+          "type": "integer",
+          "default": "250",
+          "minimum": "0",
+          "maximum": "255"
         },
         "vscode_vibrancy.color": {
           "type": "object",
@@ -239,7 +239,8 @@
   },
   "dependencies": {
     "fs-extra": "^10.1.0",
-    "mz": "^2.7.0"
+    "mz": "^2.7.0",
+    "node-powershell": "^4.0.0"
   },
   "devDependencies": {
     "node-addon-api": "^5.0.0",
