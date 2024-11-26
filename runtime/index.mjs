@@ -86,19 +86,21 @@ electron.app.on('browser-window-created', (_, window) => {
     opacity = app.theme.opacity[app.os];
   }
 
-  const backgroundRGB = hexToRgb(app.theme.background) || { r: 0, g: 0, b: 0 };
-
+  // modify start
+  const color = app.config.color
   if (app.os === 'win10') {
     const require = createRequire(import.meta.url);
     const addon = require('./vibrancy.node');
     addon.setVibrancy(
-        window.getNativeWindowHandle().readInt32LE(0),
-        1,
-        backgroundRGB.r,
-        backgroundRGB.g,
-        backgroundRGB.b,
-        0
-      );
+      window.getNativeWindowHandle().readInt32LE(0),
+      1,
+      color.r,
+      color.g,
+      color.b,
+      color.a
+    );
+    // modify end
+    
     import('./win10refresh.mjs')
       .then((module) => {
         module.default(window, 60);
