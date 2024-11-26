@@ -537,7 +537,6 @@ function activate(context) {
       throw error;
     }
     SetTransParency(255);
-    vscode.workspace.getConfiguration("vscode_vibrancy").update('alpha', 255, true);
   }
 
   async function Update() {
@@ -571,6 +570,7 @@ function activate(context) {
     enabledRestart();
   });
   var uninstallVibrancy = vscode.commands.registerCommand('extension.uninstallVibrancy', async () => {
+    vscode.workspace.getConfiguration("vscode_vibrancy").update('alpha', 255, true);
     await Uninstall()
     disabledRestart();
   });
