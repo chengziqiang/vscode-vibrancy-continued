@@ -137,6 +137,13 @@ Select Vibrancy theme:
 
 # FAQs
 
+### Recommended version?
+1.85.2 or 1.93.1
+
+### vscode title bar style error?
+
+modify setting - "window.titleBarStyle": "custom"
+
 ### How to uninstall Vibrancy?
 
 Press F1 or ⌘+Shift+P and activate command **"Disable Vibrancy"**, then restart Visual Studio Code.
