@@ -640,8 +640,9 @@ function activate(context) {
     checkDarkLightMode(theme)
   });
   var alpha = vscode.workspace.getConfiguration("vscode_vibrancy").get("alpha");
-  SetTransParency(alpha);
-
+  if (alpha != -1) {
+    SetTransParency(alpha);
+  }
 }
 exports.activate = activate;
 
